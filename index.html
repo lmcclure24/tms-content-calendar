@@ -419,6 +419,9 @@
       <div class="detail-meta" id="dMeta"></div>
       <div class="detail-row"><span class="k">When</span><span class="v" id="dWhen"></span></div>
       <div class="detail-row"><span class="k">Location</span><span class="v" id="dWhere"></span></div>
+      <div id="dCaptionWrap" class="detail-row" style="flex-direction:column;gap:5px;">
+        <span class="k">Caption</span><div class="notes-box" id="dCaption"></div>
+      </div>
       <div id="dNotesWrap" class="detail-row" style="flex-direction:column;gap:5px;">
         <span class="k">Notes</span><div class="notes-box" id="dNotes"></div>
       </div>
@@ -496,8 +499,12 @@
         </div>
       </div>
       <div class="field">
+        <label for="fCaption">Caption</label>
+        <textarea id="fCaption" placeholder="The caption to post with this, hashtags included…"></textarea>
+      </div>
+      <div class="field">
         <label for="fNotes">Notes</label>
-        <textarea id="fNotes" placeholder="Caption draft, hashtags, asset owner, approvals…"></textarea>
+        <textarea id="fNotes" placeholder="Internal notes: asset owner, approvals, reminders…"></textarea>
       </div>
     </div>
     <div class="modal-foot">
@@ -833,6 +840,9 @@
       '<span class="badge '+p.status+'">'+STATUS_ICONS[p.status]+STATUS_LABEL[p.status]+'</span>';
     document.getElementById("dWhen").textContent=formatLong(parseDate(p.date))+(p.time?" · "+fmtTime(p.time):"");
     document.getElementById("dWhere").innerHTML=p.location?(PIN+" "+escapeHtml(p.location)):'<span style="color:var(--text-faint)">Not set</span>';
+    const capWrap=document.getElementById("dCaptionWrap");
+    if(p.caption && p.caption.trim()){ capWrap.style.display="flex"; document.getElementById("dCaption").textContent=p.caption; }
+    else { capWrap.style.display="none"; }
     const notesWrap=document.getElementById("dNotesWrap");
     if(p.notes && p.notes.trim()){ notesWrap.style.display="flex"; document.getElementById("dNotes").textContent=p.notes; }
     else { notesWrap.style.display="none"; }
@@ -881,6 +891,7 @@
       document.getElementById("fLinkType").value=p.linkType||"auto";
       document.getElementById("fUrl").value=p.url||"";
       document.getElementById("fLocation").value=p.location||"";
+      document.getElementById("fCaption").value=p.caption||"";
       document.getElementById("fNotes").value=p.notes||"";
       eDel.style.display="inline-flex";
     } else {
@@ -893,6 +904,7 @@
       document.getElementById("fLinkType").value="auto";
       document.getElementById("fUrl").value="";
       document.getElementById("fLocation").value="";
+      document.getElementById("fCaption").value="";
       document.getElementById("fNotes").value="";
       eDel.style.display="none";
     }
@@ -913,6 +925,7 @@
       linkType:document.getElementById("fLinkType").value,
       url:document.getElementById("fUrl").value.trim(),
       location:document.getElementById("fLocation").value,
+      caption:document.getElementById("fCaption").value,
       notes:document.getElementById("fNotes").value
     };
     if(editId){
