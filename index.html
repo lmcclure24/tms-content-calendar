@@ -48,8 +48,13 @@
     background:#ffffff;
     display:flex;align-items:center;justify-content:center;
     box-shadow:var(--shadow-sm);
+    position:relative;overflow:hidden;
   }
   .logo svg{width:40px;height:40px;}
+  .logo img{width:100%;height:100%;object-fit:cover;border-radius:13px;display:block;}
+  body.editing .logo{cursor:pointer;}
+  .logo .logo-hint{position:absolute;inset:0;background:rgba(0,0,0,.55);color:#fff;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;text-transform:uppercase;letter-spacing:.04em;}
+  body.editing .logo:hover .logo-hint{display:flex;}
   .brand-text{min-width:0;}
   .brand-title{
     font-size:21px;font-weight:700;letter-spacing:-.02em;outline:none;
@@ -319,15 +324,8 @@
   <!-- HEADER -->
   <header class="app">
     <div class="brand">
-      <div class="logo" title="Total Med Solutions">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="52" r="40" fill="none" stroke="#8CC63F" stroke-width="9"/>
-          <path d="M20 40 Q44 30 61 31" fill="none" stroke="#28A9E0" stroke-width="5.5" stroke-linecap="round"/>
-          <path d="M64 35 Q50 50 41 60 Q34 68 33 84" fill="none" stroke="#28A9E0" stroke-width="8" stroke-linecap="round"/>
-          <path d="M44 58 Q52 66 56 84" fill="none" stroke="#28A9E0" stroke-width="6.5" stroke-linecap="round"/>
-          <circle cx="69" cy="28" r="9" fill="#28A9E0"/>
-        </svg>
-      </div>
+      <div class="logo" id="logoBox" title="Total Med Solutions"></div>
+      <input type="file" id="logoInput" accept="image/*" style="display:none">
       <div class="brand-text">
         <div class="brand-title" id="brandTitle" spellcheck="false">Total Med Solutions</div>
         <div class="brand-sub">Social Media Content Calendar</div>
@@ -530,8 +528,8 @@
   "posts": [
     {"id":"tms-0625-ig","title":"Ari Favorite Product video","date":"2026-06-25","time":"","platform":"instagram","status":"posted","linkType":"auto","url":"https://www.instagram.com/reel/DaB3C_RphY0/?igsh=MWU2eGFranYwajJtNg%3D%3D","location":"Dallas Lemmon","notes":"Posted to Instagram (origin).\nAuto-mirrors to Facebook same day. Cross-posts to TikTok and YouTube next day (Jun 26)."},
     {"id":"tms-0625-fb","title":"Ari Favorite Product video (FB auto)","date":"2026-06-25","time":"","platform":"facebook","status":"posted","linkType":"auto","url":"","location":"Dallas Lemmon","notes":"Auto-posted from Instagram (same day)."},
-    {"id":"tms-0626-tt","title":"Ari Favorite Product video (TikTok x-post)","date":"2026-06-26","time":"","platform":"tiktok","status":"scheduled","linkType":"auto","url":"","location":"Dallas Lemmon","notes":"Next-day cross-post of the Jun 25 IG reel."},
-    {"id":"tms-0626-yt","title":"Ari Favorite Product video (YouTube x-post)","date":"2026-06-26","time":"","platform":"youtube","status":"scheduled","linkType":"auto","url":"","location":"Dallas Lemmon","notes":"Next-day cross-post of the Jun 25 IG reel."},
+    {"id":"tms-0626-tt","title":"Ari Favorite Product video (TikTok cross post)","date":"2026-06-26","time":"","platform":"tiktok","status":"scheduled","linkType":"auto","url":"","location":"Dallas Lemmon","notes":"Next-day cross-post of the Jun 25 Instagram post."},
+    {"id":"tms-0626-yt","title":"Ari Favorite Product video (YouTube cross post)","date":"2026-06-26","time":"","platform":"youtube","status":"scheduled","linkType":"auto","url":"","location":"Dallas Lemmon","notes":"Next-day cross-post of the Jun 25 Instagram post."},
     {"id":"tms-0626","title":"Product Reel (viral product shots)","date":"2026-06-26","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","location":"Allen","notes":"Type: Fun video\nReel, viral format, product shots only (no people on screen).\nCreated by Logan and Stacey (content team)."},
     {"id":"tms-0627","title":"Front Desk Reel with Hadlie","date":"2026-06-27","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","location":"Southlake","notes":"Type: Fun video\nReel, front desk video featuring Hadlie."},
     {"id":"tms-0629","title":"Hurst \"Shabang\" Reel","date":"2026-06-29","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","location":"Hurst","notes":"Type: Fun video\nHurst location, \"Shabang\" video."},
@@ -570,10 +568,11 @@
   };
   const STATUS_LABEL = {posted:"Posted", scheduled:"Scheduled", draft:"Draft / Idea"};
   const LOCATIONS = ["Plano","Allen","Hurst","Flower Mound","Southlake","Fort Worth","Dallas Lemmon","Dallas Walnut"];
+  const DEFAULT_LOGO = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="52" r="40" fill="none" stroke="#8CC63F" stroke-width="9"/><path d="M20 40 Q44 30 61 31" fill="none" stroke="#28A9E0" stroke-width="5.5" stroke-linecap="round"/><path d="M64 35 Q50 50 41 60 Q34 68 33 84" fill="none" stroke="#28A9E0" stroke-width="8" stroke-linecap="round"/><circle cx="69" cy="28" r="9" fill="#28A9E0"/></svg>';
   const PIN = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
 
   // ---------- State ----------
-  const STORE_KEY = "tms_calendar_v9";
+  const STORE_KEY = "tms_calendar";
   let state = loadState();
   let viewDate = new Date(); viewDate.setDate(1);
   let currentView = "month";
@@ -821,6 +820,11 @@
     const sel=document.getElementById("fLocation");
     sel.innerHTML='<option value="">Select a clinic</option>'+LOCATIONS.map(l=>'<option value="'+escapeHtml(l)+'">'+escapeHtml(l)+'</option>').join("")+'<option value="N/A">N/A (not clinic-specific)</option>';
   }
+  function renderLogo(){
+    const box=document.getElementById("logoBox");
+    if(!box) return;
+    box.innerHTML=(state.logo?'<img src="'+state.logo+'" alt="Total Med Solutions">':DEFAULT_LOGO)+'<span class="logo-hint">Change</span>';
+  }
   function openEdit(id, presetDate){
     editId=id;
     fillPlatformSelect();
@@ -918,7 +922,7 @@
     const clone=document.documentElement.cloneNode(true);
     // Bake current data into the seed script so recipients see the latest
     const seedScript=clone.querySelector("#seed-data");
-    const baked={ brand:state.brand, platforms:state.platforms, posts:state.posts };
+    const baked={ brand:state.brand, logo:state.logo||"", platforms:state.platforms, posts:state.posts };
     seedScript.textContent="\n"+JSON.stringify(baked,null,2)+"\n";
     // Reset transient UI state in the exported copy
     clone.classList.remove("editing");
@@ -949,6 +953,14 @@
       activeFilters=new Set(state.platforms.map(p=>p.id));
     }
     document.getElementById("brandTitle").textContent = state.brand || "Total Med Solutions";
+    renderLogo();
+    document.getElementById("logoBox").addEventListener("click",function(){ if(editing){ document.getElementById("logoInput").click(); } });
+    document.getElementById("logoInput").addEventListener("change",function(e){
+      const f=e.target.files&&e.target.files[0]; if(!f) return;
+      const r=new FileReader();
+      r.onload=function(){ state.logo=r.result; save(); renderLogo(); toast("Logo updated"); };
+      r.readAsDataURL(f);
+    });
 
     document.querySelectorAll("#viewSeg button").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.view)));
     document.getElementById("prevBtn").onclick=()=>{ viewDate.setMonth(viewDate.getMonth()-1); render(); };
