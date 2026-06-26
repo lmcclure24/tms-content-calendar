@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Total Med Solutions Social Media Content Calendar</title>
 <style>
   :root{
@@ -607,7 +610,8 @@
       // merge in any new posts shipped in the file that this browser doesn't have yet,
       // while keeping the user's own logo, edits and additions
       const have=new Set(saved.posts.map(p=>p.id));
-      seed.posts.forEach(function(sp){ if(!have.has(sp.id)) saved.posts.push(sp); });
+      const del=new Set(saved.deleted||[]);
+      seed.posts.forEach(function(sp){ if(!have.has(sp.id) && !del.has(sp.id)) saved.posts.push(sp); });
       return saved;
     }
     return seed;
@@ -759,12 +763,16 @@
       return;
     }
     const todayStr=localISO();
-    let html=""; let lastGroup=null;
-    posts.forEach(p=>{
-      const grp = p.date<todayStr ? "Past" : (p.date===todayStr?"Today":"Upcoming");
-      if(grp!==lastGroup){ html+='<div class="list-group-h">'+grp+'</div>'; lastGroup=grp; }
-      html+=lrowHtml(p);
-    });
+    const asc=(a,b)=>(a.date+a.time).localeCompare(b.date+b.time);
+    const desc=(a,b)=>(b.date+b.time).localeCompare(a.date+a.time);
+    const today=posts.filter(p=>p.date===todayStr).sort(asc);
+    const upcoming=posts.filter(p=>p.date>todayStr).sort(asc);
+    const past=posts.filter(p=>p.date<todayStr).sort(desc);
+    let html="";
+    const section=(label,arr)=>{ if(!arr.length) return; html+='<div class="list-group-h">'+label+'</div>'; arr.forEach(p=>{ html+=lrowHtml(p); }); };
+    section("Today",today);
+    section("Upcoming",upcoming);
+    section("Past",past);
     list.innerHTML=html;
     list.querySelectorAll(".lrow").forEach(r=>r.addEventListener("click",()=>openDetail(r.dataset.id)));
   }
@@ -899,6 +907,7 @@
   }
   function deletePost(id){
     state.posts=state.posts.filter(p=>p.id!==id);
+    state.deleted=(state.deleted||[]).concat(id);
     save(); hide("editOverlay"); hide("detailOverlay"); render(); toast("Post deleted");
   }
 
