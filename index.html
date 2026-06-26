@@ -130,14 +130,14 @@
     border:1px solid var(--border-soft);border-radius:var(--radius);
     overflow:hidden;box-shadow:var(--shadow);
   }
-  .weekdays{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border-soft);}
+  .weekdays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--border-soft);}
   .weekdays div{
     padding:11px 12px;font-size:11px;font-weight:700;color:var(--text-faint);
     text-transform:uppercase;letter-spacing:.07em;text-align:left;
   }
-  .grid{display:grid;grid-template-columns:repeat(7,1fr);}
+  .grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));}
   .cell{
-    min-height:124px;border-right:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);
+    min-height:124px;min-width:0;border-right:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);
     padding:8px 8px 10px;position:relative;display:flex;flex-direction:column;gap:5px;
     transition:background .15s ease;
   }
@@ -418,6 +418,7 @@
     <div class="modal-body">
       <div class="detail-meta" id="dMeta"></div>
       <div class="detail-row"><span class="k">When</span><span class="v" id="dWhen"></span></div>
+      <div class="detail-row"><span class="k">Location</span><span class="v" id="dWhere"></span></div>
       <div id="dNotesWrap" class="detail-row" style="flex-direction:column;gap:5px;">
         <span class="k">Notes</span><div class="notes-box" id="dNotes"></div>
       </div>
@@ -475,6 +476,10 @@
           </select>
         </div>
       </div>
+      <div class="field">
+        <label for="fLocation">Location (clinic)</label>
+        <select id="fLocation"></select>
+      </div>
       <div class="field-row">
         <div class="field">
           <label for="fLinkType">Link type</label>
@@ -520,23 +525,23 @@
     {"id":"youtube","name":"YouTube","color":"#FF0000"}
   ],
   "posts": [
-    {"id":"tms-0625-ig","title":"New Reel (June 25)","date":"2026-06-25","time":"","platform":"instagram","status":"posted","linkType":"auto","url":"https://www.instagram.com/reel/DaB3C_RphY0/?igsh=MWU2eGFranYwajJtNg%3D%3D","notes":"Posted to Instagram (origin).\nAuto-mirrors to Facebook same day. Cross-posts to TikTok and YouTube next day (Jun 26).\nRename with the video topic."},
-    {"id":"tms-0625-fb","title":"New Reel (June 25) FB auto","date":"2026-06-25","time":"","platform":"facebook","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DaB3C_RphY0/?igsh=MWU2eGFranYwajJtNg%3D%3D","notes":"Auto-posted from Instagram (same day). Link opens the original IG reel. Swap in the Facebook link if you want."},
-    {"id":"tms-0626-tt","title":"New Reel (June 25) TikTok x-post","date":"2026-06-26","time":"","platform":"tiktok","status":"scheduled","linkType":"auto","url":"","notes":"Next-day cross-post of the Jun 25 IG reel.\nAdd the TikTok link once live."},
-    {"id":"tms-0626-yt","title":"New Reel (June 25) YouTube x-post","date":"2026-06-26","time":"","platform":"youtube","status":"scheduled","linkType":"auto","url":"","notes":"Next-day cross-post of the Jun 25 IG reel.\nAdd the YouTube link once live."},
-    {"id":"tms-0626","title":"Product Reel (viral product shots)","date":"2026-06-26","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","notes":"Type: Fun video\nReel, viral format, product shots only (no people on screen).\nCreated by Logan and Stacey (content team)."},
-    {"id":"tms-0627","title":"Front Desk Reel with Hadlie","date":"2026-06-27","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","notes":"Type: Fun video\nReel, front desk video featuring Hadlie."},
-    {"id":"tms-0629","title":"Hurst \"Shabang\" Reel","date":"2026-06-29","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","notes":"Type: Fun video\nHurst location, \"Shabang\" video."},
-    {"id":"tms-0630","title":"SkinPen Treatment, Dallas (Lemmon Ave)","date":"2026-06-30","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","notes":"Type: Educational / treatment video\nSkinPen treatment filmed at the Dallas, Lemmon Avenue location (1 of 2 Dallas clinics)."},
-    {"id":"tms-0702","title":"Clinic Showcase, quick cuts","date":"2026-07-02","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","notes":"Type: Other (showcase)\nShowcases the clinic in a fast quick-cuts viral format, not a traditional walkthrough."},
-    {"id":"tms-0623","title":"Much better (skincare and treatment)","date":"2026-06-23","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DZ8r2QHJsGX/?igsh=N3QwZGF6ZnJnejFi","notes":"Reel. Skincare and treatment options across the 8 DFW clinics."},
-    {"id":"tms-0622","title":"Meet Kate (Juvederm results)","date":"2026-06-22","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/p/DZ6LJcAnMWf/?igsh=MTkzdTJlNDFzd21jNQ==","notes":"Carousel. Juvederm facial balancing, patient Kate. Results may vary."},
-    {"id":"tms-0617","title":"Much better now (medical-grade skincare)","date":"2026-06-17","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DZtQDIppJZJ/?igsh=MWZjeTI2YjVlMHp6Mg==","notes":"Reel. Medical-grade skincare from Total Skin."},
-    {"id":"tms-0615","title":"HydraFacial myths busted","date":"2026-06-15","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/p/DZoGqZLHJHC/?igsh=MWZ1dXQ0MHMwN2UyMQ==","notes":"Carousel. HydraFacial myths busted, no pain and no downtime."},
-    {"id":"tms-0611","title":"Six years in Flower Mound","date":"2026-06-11","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DZd42WmAfNP/?igsh=MTY3YTR6bjh0N21sYQ==","notes":"Reel. 6 year anniversary at the Flower Mound location."},
-    {"id":"tms-0610","title":"Sound of anti-aging (HydraFacial)","date":"2026-06-10","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DZbEfJ5p95o/?igsh=aG9wbXN1MDdkb3hh","notes":"Reel. HydraFacial, cleanse, exfoliate, extract, infuse."},
-    {"id":"tms-0609","title":"Three areas, one look (Juvederm)","date":"2026-06-09","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/p/DZYl068CcY6/?igsh=cDhxYXYxMnI2bjdv","notes":"Carousel. Juvederm collection, patient Jazz. Results may vary."},
-    {"id":"tms-0604","title":"6th anniversary, Flower Mound","date":"2026-06-04","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/p/DZL5SE5DcxR/?igsh=Y2swMGRqbHEzanVz","notes":"Carousel. 6th anniversary celebration at Flower Mound."}
+    {"id":"tms-0625-ig","title":"Ari Favorite Product video","date":"2026-06-25","time":"","platform":"instagram","status":"posted","linkType":"auto","url":"https://www.instagram.com/reel/DaB3C_RphY0/?igsh=MWU2eGFranYwajJtNg%3D%3D","location":"","notes":"Posted to Instagram (origin).\nAuto-mirrors to Facebook same day. Cross-posts to TikTok and YouTube next day (Jun 26)."},
+    {"id":"tms-0625-fb","title":"Ari Favorite Product video (FB auto)","date":"2026-06-25","time":"","platform":"facebook","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DaB3C_RphY0/?igsh=MWU2eGFranYwajJtNg%3D%3D","location":"","notes":"Auto-posted from Instagram (same day). Link opens the original IG reel. Swap in the Facebook link if you want."},
+    {"id":"tms-0626-tt","title":"Ari Favorite Product video (TikTok x-post)","date":"2026-06-26","time":"","platform":"tiktok","status":"scheduled","linkType":"auto","url":"","location":"","notes":"Next-day cross-post of the Jun 25 IG reel.\nAdd the TikTok link once live."},
+    {"id":"tms-0626-yt","title":"Ari Favorite Product video (YouTube x-post)","date":"2026-06-26","time":"","platform":"youtube","status":"scheduled","linkType":"auto","url":"","location":"","notes":"Next-day cross-post of the Jun 25 IG reel.\nAdd the YouTube link once live."},
+    {"id":"tms-0626","title":"Product Reel (viral product shots)","date":"2026-06-26","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","location":"","notes":"Type: Fun video\nReel, viral format, product shots only (no people on screen).\nCreated by Logan and Stacey (content team)."},
+    {"id":"tms-0627","title":"Front Desk Reel with Hadlie","date":"2026-06-27","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","location":"","notes":"Type: Fun video\nReel, front desk video featuring Hadlie."},
+    {"id":"tms-0629","title":"Hurst \"Shabang\" Reel","date":"2026-06-29","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","location":"Hurst","notes":"Type: Fun video\nHurst location, \"Shabang\" video."},
+    {"id":"tms-0630","title":"SkinPen Treatment, Dallas (Lemmon Ave)","date":"2026-06-30","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","location":"Dallas Lemmon","notes":"Type: Educational / treatment video\nSkinPen treatment filmed at the Dallas, Lemmon Avenue location (1 of 2 Dallas clinics)."},
+    {"id":"tms-0702","title":"Clinic Showcase, quick cuts","date":"2026-07-02","time":"","platform":"instagram","status":"scheduled","linkType":"auto","url":"","location":"","notes":"Type: Other (showcase)\nShowcases the clinic in a fast quick-cuts viral format, not a traditional walkthrough."},
+    {"id":"tms-0623","title":"Much better (skincare and treatment)","date":"2026-06-23","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DZ8r2QHJsGX/?igsh=N3QwZGF6ZnJnejFi","location":"","notes":"Reel. Skincare and treatment options across the 8 DFW clinics."},
+    {"id":"tms-0622","title":"Meet Kate (Juvederm results)","date":"2026-06-22","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/p/DZ6LJcAnMWf/?igsh=MTkzdTJlNDFzd21jNQ==","location":"","notes":"Carousel. Juvederm facial balancing, patient Kate. Results may vary."},
+    {"id":"tms-0617","title":"Much better now (medical-grade skincare)","date":"2026-06-17","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DZtQDIppJZJ/?igsh=MWZjeTI2YjVlMHp6Mg==","location":"","notes":"Reel. Medical-grade skincare from Total Skin."},
+    {"id":"tms-0615","title":"HydraFacial myths busted","date":"2026-06-15","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/p/DZoGqZLHJHC/?igsh=MWZ1dXQ0MHMwN2UyMQ==","location":"","notes":"Carousel. HydraFacial myths busted, no pain and no downtime."},
+    {"id":"tms-0611","title":"Six years in Flower Mound","date":"2026-06-11","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DZd42WmAfNP/?igsh=MTY3YTR6bjh0N21sYQ==","location":"Flower Mound","notes":"Reel. 6 year anniversary at the Flower Mound location."},
+    {"id":"tms-0610","title":"Sound of anti-aging (HydraFacial)","date":"2026-06-10","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/reel/DZbEfJ5p95o/?igsh=aG9wbXN1MDdkb3hh","location":"","notes":"Reel. HydraFacial, cleanse, exfoliate, extract, infuse."},
+    {"id":"tms-0609","title":"Three areas, one look (Juvederm)","date":"2026-06-09","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/p/DZYl068CcY6/?igsh=cDhxYXYxMnI2bjdv","location":"","notes":"Carousel. Juvederm collection, patient Jazz. Results may vary."},
+    {"id":"tms-0604","title":"6th anniversary, Flower Mound","date":"2026-06-04","time":"","platform":"instagram","status":"posted","linkType":"live","url":"https://www.instagram.com/p/DZL5SE5DcxR/?igsh=Y2swMGRqbHEzanVz","location":"Flower Mound","notes":"Carousel. 6th anniversary celebration at Flower Mound."}
   ]
 }
 </script>
@@ -561,9 +566,11 @@
     draft:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>'
   };
   const STATUS_LABEL = {posted:"Posted", scheduled:"Scheduled", draft:"Draft / Idea"};
+  const LOCATIONS = ["Plano","Hurst","Flower Mound","Southlake","Fort Worth","Dallas Lemmon","Dallas Walnut"];
+  const PIN = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
 
   // ---------- State ----------
-  const STORE_KEY = "tms_calendar_v5";
+  const STORE_KEY = "tms_calendar_v6";
   let state = loadState();
   let viewDate = new Date(); viewDate.setDate(1);
   let currentView = "month";
@@ -756,6 +763,7 @@
         '<div class="lmeta">'+
           '<span class="pill" style="--p-color:'+pf.color+'"><span class="pdot"></span>'+escapeHtml(pf.name)+'</span>'+
           '<span class="badge '+p.status+'">'+STATUS_ICONS[p.status]+STATUS_LABEL[p.status]+'</span>'+
+          (p.location?'<span>'+PIN+' '+escapeHtml(p.location)+'</span>':'')+
           (p.time?'<span>'+fmtTime(p.time)+'</span>':'')+
         '</div>'+
       '</div>'+
@@ -782,6 +790,7 @@
       '<span class="pill" style="--p-color:'+pf.color+'"><span class="pdot"></span>'+escapeHtml(pf.name)+'</span>'+
       '<span class="badge '+p.status+'">'+STATUS_ICONS[p.status]+STATUS_LABEL[p.status]+'</span>';
     document.getElementById("dWhen").textContent=formatLong(parseDate(p.date))+(p.time?" · "+fmtTime(p.time):"");
+    document.getElementById("dWhere").innerHTML=p.location?(PIN+" "+escapeHtml(p.location)):'<span style="color:var(--text-faint)">Not set</span>';
     const notesWrap=document.getElementById("dNotesWrap");
     if(p.notes && p.notes.trim()){ notesWrap.style.display="flex"; document.getElementById("dNotes").textContent=p.notes; }
     else { notesWrap.style.display="none"; }
@@ -805,9 +814,14 @@
     const sel=document.getElementById("fPlatform");
     sel.innerHTML=state.platforms.map(p=>'<option value="'+p.id+'">'+escapeHtml(p.name)+'</option>').join("");
   }
+  function fillLocationSelect(){
+    const sel=document.getElementById("fLocation");
+    sel.innerHTML='<option value="">Select a clinic</option>'+LOCATIONS.map(l=>'<option value="'+escapeHtml(l)+'">'+escapeHtml(l)+'</option>').join("");
+  }
   function openEdit(id, presetDate){
     editId=id;
     fillPlatformSelect();
+    fillLocationSelect();
     const eDel=document.getElementById("eDelete");
     if(id){
       const p=state.posts.find(x=>x.id===id);
@@ -819,6 +833,7 @@
       document.getElementById("fStatus").value=p.status;
       document.getElementById("fLinkType").value=p.linkType||"auto";
       document.getElementById("fUrl").value=p.url||"";
+      document.getElementById("fLocation").value=p.location||"";
       document.getElementById("fNotes").value=p.notes||"";
       eDel.style.display="inline-flex";
     } else {
@@ -830,6 +845,7 @@
       document.getElementById("fStatus").value="scheduled";
       document.getElementById("fLinkType").value="auto";
       document.getElementById("fUrl").value="";
+      document.getElementById("fLocation").value="";
       document.getElementById("fNotes").value="";
       eDel.style.display="none";
     }
@@ -849,6 +865,7 @@
       status:document.getElementById("fStatus").value,
       linkType:document.getElementById("fLinkType").value,
       url:document.getElementById("fUrl").value.trim(),
+      location:document.getElementById("fLocation").value,
       notes:document.getElementById("fNotes").value
     };
     if(editId){
