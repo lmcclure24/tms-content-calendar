@@ -340,10 +340,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
         <span id="editToggleLabel">Edit mode</span>
       </button>
-      <button class="btn primary" id="downloadBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-        Download to share
-      </button>
     </div>
   </header>
 
@@ -984,7 +980,6 @@
     document.getElementById("todayBtn").onclick=()=>{ viewDate=new Date(); viewDate.setDate(1); render(); };
     document.getElementById("editToggle").onclick=()=>setEditing(!editing);
     document.getElementById("addBtn").onclick=()=>openEdit(null,null);
-    document.getElementById("downloadBtn").onclick=exportHtml;
 
     // brand title autosave
     const bt=document.getElementById("brandTitle");
